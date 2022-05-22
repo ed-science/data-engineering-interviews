@@ -137,11 +137,10 @@ def read(path: str) -> str:
       PermissionError: Happened when file is not accessible.
     """
     try:
-        if os.path.isfile(path):
-            with open(path, 'r') as f:
-                return f.read()
-        else:
+        if not os.path.isfile(path):
             raise FileNotFoundError(f"{path} doesn't exist.")
+        with open(path, 'r') as f:
+            return f.read()
     except FileNotFoundError as ex:
         raise FileNotFoundError(f"[line {get_line()}] {ex}")
     except PermissionError as ex:
@@ -280,7 +279,7 @@ def generate_stats_table(stats: dict) -> str:
     Returns:
       Md table string.
     """
-    cnt_total = sum([v['cnt'] for v in stats.values()])
+    cnt_total = sum(v['cnt'] for v in stats.values())
 
     header = f"""## Questions categories
     
